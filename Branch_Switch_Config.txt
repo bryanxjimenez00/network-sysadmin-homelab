@@ -1,0 +1,34 @@
+! Standard Branch Access Switch Configuration
+! 
+enable
+configure terminal
+hostname SW-Branch-01
+
+! Configure VLANs
+vlan 10
+ name Data_Users
+vlan 20
+ name Voice_Traffic
+vlan 99
+ name Management
+
+! Assign Access Ports to VLANs
+interface range GigabitEthernet0/1 - 10
+ switchport mode access
+ switchport access vlan 10
+ switchport voice vlan 20
+ spanning-tree portfast
+
+! Configure Management Interface
+interface vlan 99
+ ip address 192.168.10.194 255.255.255.240
+ no shutdown
+
+! Secure Console and VTY Lines
+line console 0
+ password 7 0822455D0A16
+ login
+line vty 0 4
+ password 7 0822455D0A16
+ login
+ transport input ssh
